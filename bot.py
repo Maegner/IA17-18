@@ -3,8 +3,6 @@ def get_neighbours(pos,matrix,element,result):
      
     # verfies if the element to the right of the refered position is equal to the element
     if len(matrix[pos[0]]) > pos[1]+1:
-
-        print(pos[0])
         
         if element == matrix[pos[0]][pos[1]+1]:
         
@@ -43,5 +41,24 @@ def get_neighbours(pos,matrix,element,result):
     else:
         return result
 
-s = get_neighbours((0,0),[[1,2,2,3,3],[2,2,2,1,3],[1,2,2,2,2],[1,1,1,1,1]],2,[(0,1)])
-print(s)      
+def board_find_groups(matrix):
+    result = []
+    l = 0
+    col = 0
+    for linha in matrix:
+        for element in linha:
+            if(element == -1):
+                col+=1
+                continue
+
+            matrix[l][col] = -1
+
+            result.append(get_neighbours((l,col),matrix,element,[(l,col)]))
+            col+=1
+        l+=1
+        col = 0
+    return result
+
+s = board_find_groups([[1,2,2,3,3],[2,2,2,1,3],[1,2,2,2,2],[1,1,1,1,1]])
+
+print(s)
