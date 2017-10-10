@@ -1,3 +1,5 @@
+from personalUtils import *
+
 
 def get_neighbours(pos,matrix,element,result):
      
@@ -59,6 +61,6 @@ def board_find_groups(matrix):
         col = 0
     return result
 
-s = board_find_groups([[1,2,2,3,3],[2,2,2,1,3],[1,2,2,2,2],[1,1,1,1,1]])
+testMatrix = [[1,1,1,1],[1,1,1,1],[1,1,1,1],[1,1,1,1]]
 
-print(s)
+propagateFall(testMatrix,(3,3))
