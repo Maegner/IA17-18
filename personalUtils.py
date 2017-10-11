@@ -83,7 +83,7 @@ def propagateFall(matrixPrem,deletedPos):
 def deslocaTudoEsquerda(matrix, column):
 	if(column == 0):
 		return
-	for i in range(len(matrix[0])):
+	for i in range(len(matrix)):
 		pos = (i, column)
 		newPos = (i, column-1)
 		color = getColorInPosition(matrix, pos) 

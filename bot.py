@@ -64,34 +64,34 @@ def board_find_groups(matrix):
 
 def board_remove_group(matrix, group):
     colunasVazias = []
-    linesNumber = len(matrix[0]) -1
-    columnNumber = len(matrix)-1
+    linesNumber = len(matrix) 
+    columnNumber = len(matrix[0])
+    print(linesNumber)
+    print(columnNumber)
     for pos in group:
         posLine =  pos_line(pos)
         posColumn = pos_column(pos)
         color = getColorInPosition(matrix, pos)
         posAbove = get_upper(pos)
-
-        if (posLine == linesNumber and no_color(getColorInPosition(matrix, posAbove))):
-            colunasVazias.append(posColumn)
-
         if (posLine > 0 and getColorInPosition(matrix, posAbove) != color):
             propagateFall(matrix, pos)
 
         else:
             setColorInPosition(matrix,pos,set_no_color())
+    for column in range(columnNumber):
+        if(matrix[linesNumber-1][column] == 0):
+            colunasVazias.append(column)
+    print(colunasVazias)
     for column in colunasVazias:
         somatorio = column +1
         while(1):
-            if(somatorio > columnNumber):
+            if(somatorio > columnNumber-1):
                 break
+            print(somatorio)
             deslocaTudoEsquerda(matrix,somatorio)
             somatorio +=1
     return matrix
 
-testMatrix = [[0,0,0,0],[0,2,3,3],[1,2,1,3],[2,2,2,2]]
-matrix = copy.deepcopy(testMatrix)
-printGame(testMatrix)
-print("\n")
-test = board_find_groups(matrix)
-printGame(board_remove_group(testMatrix, test[1]))
+
+b1 = [[0,0,0,0,0],[0,2,3,3,0],[1,2,1,3,0],[2,2,2,2,0]]
+printGame(board_remove_group(b1,[(1,1),(2,1),(3,1),(3,2),(3,3),(3,0)]) )
