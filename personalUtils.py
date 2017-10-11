@@ -1,3 +1,5 @@
+import copy
+
 #TAI color
 #sem cor = 0
 #com cor > 0
@@ -50,7 +52,7 @@ def printGame(matrix):
 
 def propagateFall(matrixPrem,deletedPos):
 
-	matrix = matrixPrem
+	matrix = copy.deepcopy(matrixPrem)
 
 	numeroColunas = len(matrix[0])
 
@@ -76,3 +78,7 @@ def propagateFall(matrixPrem,deletedPos):
 			setColorInPosition(matrix,position,0)  #empty previous position
 
 	printGame(matrix)
+	print(" ")
+	printGame(matrixPrem)
+
+propagateFall([[1,1,1,1],[1,1,1,1]],(1,1))
