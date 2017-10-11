@@ -66,8 +66,6 @@ def board_remove_group(matrix, group):
     colunasVazias = []
     linesNumber = len(matrix) 
     columnNumber = len(matrix[0])
-    print(linesNumber)
-    print(columnNumber)
     for pos in group:
         posLine =  pos_line(pos)
         posColumn = pos_column(pos)
@@ -81,17 +79,22 @@ def board_remove_group(matrix, group):
     for column in range(columnNumber):
         if(matrix[linesNumber-1][column] == 0):
             colunasVazias.append(column)
-    print(colunasVazias)
-    for column in colunasVazias:
+    for column in colunasVazias[::-1]:
         somatorio = column +1
         while(1):
             if(somatorio > columnNumber-1):
                 break
-            print(somatorio)
             deslocaTudoEsquerda(matrix,somatorio)
+            printGame(matrix)
+            print("\n")
             somatorio +=1
     return matrix
 
 
-b1 = [[0,0,0,0,0],[0,2,3,3,0],[1,2,1,3,0],[2,2,2,2,0]]
-printGame(board_remove_group(b1,[(1,1),(2,1),(3,1),(3,2),(3,3),(3,0)]) )
+#b1 = [[0,0,2,0,3],[0,2,2,3,1],[1,2,2,3,3],[2,2,2,2,1]]
+b1 = [[0,0,0,2,3],[0,0,2,3,1],[1,0,2,3,3],[2,0,2,2,1]]
+printGame(b1)
+matrix = copy.deepcopy(b1)
+res = board_find_groups(matrix)
+print("\n")
+(board_remove_group(b1,[(0,3), (1,2),(2,2), (3,0), (3,2),(3,3)]))

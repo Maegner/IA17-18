@@ -65,8 +65,7 @@ def propagateFall(matrixPrem,deletedPos):
 
 	if(deletedPosLine == 0):
 		print("deleted from top line")
-		printGame(matrix)
-		return
+		return matrix
 	
 	else:
 
