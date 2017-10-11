@@ -1,10 +1,11 @@
-import copy
-
 #TAI color
 #sem cor = 0
 #com cor > 0
 def set_no_color():
 	return 0
+
+def no_color (c):
+	return c==0 
 
 def has_color(c):
 	return c>0
@@ -52,7 +53,7 @@ def printGame(matrix):
 
 def propagateFall(matrixPrem,deletedPos):
 
-	matrix = copy.deepcopy(matrixPrem)
+	matrix = matrixPrem
 
 	numeroColunas = len(matrix[0])
 
@@ -62,14 +63,14 @@ def propagateFall(matrixPrem,deletedPos):
 	setColorInPosition(matrix,deletedPos,0)
 
 
-	if(deletedPosLine== 0):
+	if(deletedPosLine == 0):
 		print("deleted from top line")
+		printGame(matrix)
 		return
 	
 	else:
 
 		for lineNumber in range(deletedPosLine-1,-1,-1):
-
 			position = (lineNumber,deletedPosColumn)
 			newPosition = (lineNumber+1,deletedPosColumn)
 			color = getColorInPosition(matrix,position)
@@ -77,8 +78,15 @@ def propagateFall(matrixPrem,deletedPos):
 			setColorInPosition(matrix,newPosition,color) #drop it down
 			setColorInPosition(matrix,position,0)  #empty previous position
 
-	printGame(matrix)
-	print(" ")
-	printGame(matrixPrem)
 
-propagateFall([[1,1,1,1],[1,1,1,1]],(1,1))
+	#printGame(matrix)
+def deslocaTudoEsquerda(matrix, column):
+	if(column == 0):
+		return
+	for i in range(len(matrix[0])):
+		pos = (i, column)
+		newPos = (i, column-1)
+		color = getColorInPosition(matrix, pos) 
+		setColorInPosition(matrix,pos,set_no_color())
+		setColorInPosition(matrix, newPos, color)
+	return matrix
