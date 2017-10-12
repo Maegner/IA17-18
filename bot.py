@@ -78,30 +78,35 @@ def board_remove_group(recievingMatrix, group):
 
     matrix = copy.deepcopy(recievingMatrix)
 
+<<<<<<< HEAD
+def board_remove_group(matrix, group):
+    matrixCopy = copy.deepcopy(matrix)
+=======
+>>>>>>> dd3f284b160b7f2519e67cd63ecc127e3c486b3b
     colunasVazias = []
-    linesNumber = len(matrix) 
-    columnNumber = len(matrix[0])
+    linesNumber = len(matrixCopy) 
+    columnNumber = len(matrixCopy[0])
     for pos in group:
         posLine =  pos_line(pos)
         posColumn = pos_column(pos)
-        color = getColorInPosition(matrix, pos)
+        color = getColorInPosition(matrixCopy, pos)
         posAbove = get_upper(pos)
-        if (posLine > 0 and getColorInPosition(matrix, posAbove) != color):
-            propagateFall(matrix, pos)
+        if (posLine > 0 and getColorInPosition(matrixCopy, posAbove) != color):
+            propagateFall(matrixCopy, pos)
 
         else:
-            setColorInPosition(matrix,pos,set_no_color())
+            setColorInPosition(matrixCopy,pos,set_no_color())
     for column in range(columnNumber):
-        if(matrix[linesNumber-1][column] == 0):
+        if(matrixCopy[linesNumber-1][column] == 0):
             colunasVazias.append(column)
     for column in colunasVazias[::-1]:
         somatorio = column +1
         while(1):
             if(somatorio > columnNumber-1):
                 break
-            deslocaTudoEsquerda(matrix,somatorio)
+            deslocaTudoEsquerda(matrixCopy,somatorio)
             somatorio +=1
-    return matrix
+    return matrixCopy
 
 class sg_state():
 
@@ -120,7 +125,12 @@ class sg_state():
         return self.numberBalls
 
     def isEmpty(self):
-        return self.numberBalls == 0
+        for line in self.board:
+            for element in line:
+
+                if(has_color(element)):
+                    return False
+        return True
 
 class same_game(Problem):
 
@@ -128,15 +138,8 @@ class same_game(Problem):
         return board_find_groups(state.board)
     
     def result(self, state, action):
-        print("initialState\n")
-        printGame(state.board)
-        print("action\n")
-        print(action)
-        state = sg_state(board_remove_group(state.board, action))
-        state.removeBalls(len(action))
-        printGame(state.board)
-        print("\n")
-        return state
+        return sg_state(board_remove_group(state.board, action))
+
 
     def goal_test(self, state):
         return state.isEmpty() #not really
@@ -152,7 +155,12 @@ initialBoard = sg_state(a)
 prob = same_game(initialBoard)
 printGame(a)
 print("\n")
+<<<<<<< HEAD
 print(depth_first_tree_search(prob))
 
 s = board_find_groups([[0,0,0,0,0,0],[0,0,0,0,0,]])
 print(s)
+=======
+print(depth_first_tree_search(prob).solution())
+
+>>>>>>> 6374db937474d4829f8486e6292b881f6f4e61cc
