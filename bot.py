@@ -90,11 +90,11 @@ def board_remove_group(matrix, group):
             somatorio +=1
     return matrix
 
+class sg_state():
+    def __init__(self, board):
+        self.board = board
+        self.numberBalls = len(board)*len(board[0])
+    def __lt__(self, state):
+        return self.numberBalls < state.numberBalls 
 
-#b1 = [[0,0,2,0,3],[0,2,2,3,1],[1,2,2,3,3],[2,2,2,2,1]]
-b1 = [[0,0,0,2,3],[0,0,2,3,1],[1,0,2,3,3],[2,0,2,2,1]]
-printGame(b1)
-matrix = copy.deepcopy(b1)
-res = board_find_groups(matrix)
-print("\n")
-(board_remove_group(b1,[(0,3), (1,2),(2,2), (3,0), (3,2),(3,3)]))
+
