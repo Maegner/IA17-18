@@ -54,7 +54,6 @@ def printGame(matrix):
 def propagateFall(matrixPrem,deletedPos):
 
 	matrix = matrixPrem
-
 	numeroColunas = len(matrix[0])
 
 	deletedPosLine = pos_line(deletedPos)
@@ -64,7 +63,6 @@ def propagateFall(matrixPrem,deletedPos):
 
 
 	if(deletedPosLine == 0):
-		print("deleted from top line")
 		return matrix
 	
 	else:

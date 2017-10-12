@@ -1,6 +1,6 @@
 from personalUtils import *
+from search import *
 import copy
-
 def get_neighbours(pos,matrix,element,result):
      
     # verfies if the element to the right of the refered position is equal to the element
@@ -44,18 +44,19 @@ def get_neighbours(pos,matrix,element,result):
         return result
 
 def board_find_groups(matrix):
+    matrixCopy = copy.deepcopy(matrix)
     result = []
     l = 0
     col = 0
-    for linha in matrix:
+    for linha in matrixCopy:
         for element in linha:
-            if(element == -1):
+            if(element == -1 or element == 0):
                 col+=1
                 continue
 
-            matrix[l][col] = -1
-
-            result.append(get_neighbours((l,col),matrix,element,[(l,col)]))
+            matrixCopy[l][col] = -1
+            neighbours = get_neighbours((l,col),matrixCopy,element,[(l,col)])
+            result.append(neighbours)
             col+=1
         l+=1
         col = 0
@@ -85,8 +86,6 @@ def board_remove_group(matrix, group):
             if(somatorio > columnNumber-1):
                 break
             deslocaTudoEsquerda(matrix,somatorio)
-            printGame(matrix)
-            print("\n")
             somatorio +=1
     return matrix
 
@@ -96,5 +95,45 @@ class sg_state():
         self.numberBalls = len(board)*len(board[0])
     def __lt__(self, state):
         return self.numberBalls < state.numberBalls 
+    def removeBalls(self, n):
+        self.numberBalls -= n
+    def getBalls(self):
+        return self.numberBalls
+
+    def isEmpty(self):
+        return self.numberBalls == 0
+
+class same_game(Problem):
+    def actions(self, state):
+        return board_find_groups(state.board)
+    
+    def result(self, state, action):
+        print("initialState\n")
+        printGame(state.board)
+        print("action\n")
+        print(action)
+        state = sg_state(board_remove_group(state.board, action))
+        state.removeBalls(len(action))
+        printGame(state.board)
+        print("\n")
+        return state
+
+    def goal_test(self, state):
+        return state.isEmpty()
+
+    def path_cost(self, c, state1, action, state2):
+        return 1 #Duvidas aqui
+
+    #def h(self, node):
+       # return 
 
 
+a = [[1,2,2,3,3],[2,2,2,1,3],[1,2,2,2,2],[1,1,1,1,1]] 
+initialBoard = sg_state(a)
+prob = same_game(initialBoard)
+#printGame(a)
+#print("\n")
+test = [[0,0,0,0,0],[1,0,0,3,3],[1,0,0,1,3],[1,1,1,1,1]]
+printGame(test)
+print(board_find_groups(test))
+#print(depth_first_tree_search(prob))
