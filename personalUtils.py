@@ -1,3 +1,4 @@
+import copy
 #TAI color
 #sem cor = 0
 #com cor > 0

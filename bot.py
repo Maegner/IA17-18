@@ -1,7 +1,26 @@
 from personalUtils import *
+from search import *
 import copy
 
 def get_neighbours(pos,matrix,element,result):
+
+    # verfies if the element to the top of the refered position is equal to the element
+    if pos[0]-1 >= 0 :
+        if element == matrix[pos[0]-1][pos[1]]:
+        
+            nextPos = (pos[0]-1,pos[1])
+            matrix[pos[0]-1][pos[1]] = -1
+            result.append((pos[0]-1,pos[1]))
+            get_neighbours(nextPos,matrix,element,result)
+
+    # verfies if the element to the bottom of the refered position is equal to the element
+    if len(matrix) > pos[0]+1:
+        if element == matrix[pos[0]+1][pos[1]]:
+        
+            nextPos = (pos[0]+1,pos[1])
+            matrix[pos[0]+1][pos[1]] = -1
+            result.append((pos[0]+1,pos[1]))
+            get_neighbours(nextPos,matrix,element,result)
      
     # verfies if the element to the right of the refered position is equal to the element
     if len(matrix[pos[0]]) > pos[1]+1:
@@ -15,33 +34,14 @@ def get_neighbours(pos,matrix,element,result):
 
     
     # verfies if the element to the left of the refered position is equal to the element
-    if len(matrix[pos[0]]) > pos[1]-1:
+    if  pos[1]-1 >= 0:
         if element == matrix[pos[0]][pos[1]-1]:
         
             nextPos = (pos[0],pos[1]-1)
             matrix[pos[0]][pos[1]-1] = -1
             result.append((pos[0],pos[1]-1))
             get_neighbours(nextPos,matrix,element,result)
-
-    # verfies if the element to the bottom of the refered position is equal to the element
-    if len(matrix) > pos[0]+1:
-        if element == matrix[pos[0]+1][pos[1]]:
-        
-            nextPos = (pos[0]+1,pos[1])
-            matrix[pos[0]+1][pos[1]] = -1
-            result.append((pos[0]+1,pos[1]))
-            get_neighbours(nextPos,matrix,element,result)
-
-    # verfies if the element to the top of the refered position is equal to the element
-    if len(matrix) < pos[0]-1:
-        if element == matrix[pos[0]-1][pos[1]]:
-        
-            nextPos = (pos[0]-1,pos[1])
-            matrix[pos[0]-1][pos[1]] = -1
-            result.append((pos[0]-1,pos[1]))
-            get_neighbours(nextPos,matrix,element,result)
-    else:
-        return result
+    return result
 
 def board_find_groups(matrix):
     result = []
@@ -61,8 +61,24 @@ def board_find_groups(matrix):
         col = 0
     return result
 
+def findIsolatedBalls(groups,matrix):
 
-def board_remove_group(matrix, group):
+    isolatedBallNumber = 0
+    isolatedBallColors = []
+
+    for group in groups:
+        if len(group) == 1:
+            isolatedBallNumber+=1
+            append(isolatedBallColors,getColorInPosition(matrix,group[0]))
+    
+    return isolatedBallNumber,isolatedBallColors
+
+
+
+def board_remove_group(recievingMatrix, group):
+
+    matrix = copy.deepcopy(recievingMatrix)
+
     colunasVazias = []
     linesNumber = len(matrix) 
     columnNumber = len(matrix[0])
@@ -85,16 +101,27 @@ def board_remove_group(matrix, group):
             if(somatorio > columnNumber-1):
                 break
             deslocaTudoEsquerda(matrix,somatorio)
-            printGame(matrix)
+            #printGame(matrix)
             print("\n")
             somatorio +=1
     return matrix
 
 class sg_state():
-    def __init__(self, board):
+
+    def __init__(self, board,ballNumber,isolatedBallColor,isolatedBallNumber):
+        
+        self.isolatedBallColor = isolatedBallColor
+        self.isolatedBallNumber = isolatedBallNumber
         self.board = board
-        self.numberBalls = len(board)*len(board[0])
+        self.numberBalls = len(board)*len(board[0]) 
+    
     def __lt__(self, state):
-        return self.numberBalls < state.numberBalls 
+        return self.numberBalls < state.numberBalls
 
+class same_game(Problem):
 
+    def __init__(self,board):
+        self.board = board
+
+r = board_find_groups([[1,2,2,3,3],[2,2,2,1,3],[1,2,2,2,2],[1,1,1,1,1]])
+print(r)
