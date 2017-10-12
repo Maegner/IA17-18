@@ -4,6 +4,8 @@ The way to use this code is to subclass Problem to create a class of problems,
 then create problem instances and solve them wi th calls to the various search
 functions."""
 
+from personalUtils import *
+
 from utils import (
     is_in, argmin, argmax, argmax_random_tie, probability, weighted_sampler,
     memoize, print_table, open_data, Stack, FIFOQueue, PriorityQueue, name,
