@@ -32,37 +32,12 @@ def get_neighbours(pos,matrix,element,result):
 
     
     # verfies if the element to the left of the refered position is equal to the element
-<<<<<<< HEAD
     if  pos[1]-1 >= 0:
-=======
-    if pos[1]-1 >= 0:
->>>>>>> f50f6e555cedab8983f52f8cc844026c08d411cb
         if element == matrix[pos[0]][pos[1]-1]:
             nextPos = (pos[0],pos[1]-1)
             matrix[pos[0]][pos[1]-1] = -1
             result.append((pos[0],pos[1]-1))
             get_neighbours(nextPos,matrix,element,result)
-<<<<<<< HEAD
-=======
-
-    # verfies if the element to the bottom of the refered position is equal to the element
-    if len(matrix) > pos[0]+1:
-        if element == matrix[pos[0]+1][pos[1]]:
-        
-            nextPos = (pos[0]+1,pos[1])
-            matrix[pos[0]+1][pos[1]] = -1
-            result.append((pos[0]+1,pos[1]))
-            get_neighbours(nextPos,matrix,element,result)
-
-    # verfies if the element to the top of the refered position is equal to the element
-    if pos[0]-1 >= 0:
-        if element == matrix[pos[0]-1][pos[1]]:
-            nextPos = (pos[0]-1,pos[1])
-            matrix[pos[0]-1][pos[1]] = -1
-            result.append((pos[0]-1,pos[1]))
-            get_neighbours(nextPos,matrix,element,result)
-    
->>>>>>> f50f6e555cedab8983f52f8cc844026c08d411cb
     return result
 
 def board_find_groups(matrix):
@@ -125,11 +100,6 @@ def board_remove_group(recievingMatrix, group):
             if(somatorio > columnNumber-1):
                 break
             deslocaTudoEsquerda(matrix,somatorio)
-<<<<<<< HEAD
-            #printGame(matrix)
-            print("\n")
-=======
->>>>>>> f50f6e555cedab8983f52f8cc844026c08d411cb
             somatorio +=1
     return matrix
 
@@ -143,9 +113,6 @@ class sg_state():
         self.numberBalls = len(board)*len(board[0]) 
     
     def __lt__(self, state):
-<<<<<<< HEAD
-        return self.numberBalls < state.numberBalls
-=======
         return self.numberBalls < state.numberBalls 
     def removeBalls(self, n):
         self.numberBalls -= n
@@ -178,21 +145,15 @@ class same_game(Problem):
 
     #def h(self, node):
        # return 
->>>>>>> f50f6e555cedab8983f52f8cc844026c08d411cb
 
 class same_game(Problem):
 
     def __init__(self,board):
         self.board = board
 
-<<<<<<< HEAD
-r = board_find_groups([[1,2,2,3,3],[2,2,2,1,3],[1,2,2,2,2],[1,1,1,1,1]])
-print(r)
-=======
 a = [[1,2,2,3,3],[2,2,2,1,3],[1,2,2,2,2],[1,1,1,1,1]] 
 initialBoard = sg_state(a)
 prob = same_game(initialBoard)
 printGame(a)
 print("\n")
 print(depth_first_tree_search(prob))
->>>>>>> f50f6e555cedab8983f52f8cc844026c08d411cb
