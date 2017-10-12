@@ -105,10 +105,10 @@ def board_remove_group(recievingMatrix, group):
 
 class sg_state():
 
-    def __init__(self, board,ballNumber,isolatedBallColor,isolatedBallNumber):
+    def __init__(self, board):
         
-        self.isolatedBallColor = isolatedBallColor
-        self.isolatedBallNumber = isolatedBallNumber
+        self.groups = board_find_groups(board)
+        self.isolatedBallNumber,self.isolatedBallColor = findIsolatedBalls(self.groups,board)
         self.board = board
         self.numberBalls = len(board)*len(board[0]) 
     
@@ -123,6 +123,7 @@ class sg_state():
         return self.numberBalls == 0
 
 class same_game(Problem):
+
     def actions(self, state):
         return board_find_groups(state.board)
     
@@ -138,7 +139,7 @@ class same_game(Problem):
         return state
 
     def goal_test(self, state):
-        return state.isEmpty()
+        return state.isEmpty() #not really
 
     def path_cost(self, c, state1, action, state2):
         return 1 #Duvidas aqui
@@ -146,14 +147,12 @@ class same_game(Problem):
     #def h(self, node):
        # return 
 
-class same_game(Problem):
-
-    def __init__(self,board):
-        self.board = board
-
 a = [[1,2,2,3,3],[2,2,2,1,3],[1,2,2,2,2],[1,1,1,1,1]] 
 initialBoard = sg_state(a)
 prob = same_game(initialBoard)
 printGame(a)
 print("\n")
 print(depth_first_tree_search(prob))
+
+s = board_find_groups([[0,0,0,0,0,0],[0,0,0,0,0,]])
+print(s)
