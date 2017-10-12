@@ -5,7 +5,6 @@ def get_neighbours(pos,matrix,element,result):
      
     # verfies if the element to the right of the refered position is equal to the element
     if len(matrix[pos[0]]) > pos[1]+1:
-        
         if element == matrix[pos[0]][pos[1]+1]:
         
             nextPos = (pos[0],pos[1]+1)
@@ -15,9 +14,8 @@ def get_neighbours(pos,matrix,element,result):
 
     
     # verfies if the element to the left of the refered position is equal to the element
-    if len(matrix[pos[0]]) > pos[1]-1:
+    if pos[1]-1 >= 0:
         if element == matrix[pos[0]][pos[1]-1]:
-        
             nextPos = (pos[0],pos[1]-1)
             matrix[pos[0]][pos[1]-1] = -1
             result.append((pos[0],pos[1]-1))
@@ -33,15 +31,14 @@ def get_neighbours(pos,matrix,element,result):
             get_neighbours(nextPos,matrix,element,result)
 
     # verfies if the element to the top of the refered position is equal to the element
-    if len(matrix) < pos[0]-1:
+    if pos[0]-1 >= 0:
         if element == matrix[pos[0]-1][pos[1]]:
-        
             nextPos = (pos[0]-1,pos[1])
             matrix[pos[0]-1][pos[1]] = -1
             result.append((pos[0]-1,pos[1]))
             get_neighbours(nextPos,matrix,element,result)
-    else:
-        return result
+    
+    return result
 
 def board_find_groups(matrix):
     matrixCopy = copy.deepcopy(matrix)
@@ -56,7 +53,8 @@ def board_find_groups(matrix):
 
             matrixCopy[l][col] = -1
             neighbours = get_neighbours((l,col),matrixCopy,element,[(l,col)])
-            result.append(neighbours)
+            if(len(neighbours) > 1):
+                result.append(neighbours)
             col+=1
         l+=1
         col = 0
@@ -131,9 +129,6 @@ class same_game(Problem):
 a = [[1,2,2,3,3],[2,2,2,1,3],[1,2,2,2,2],[1,1,1,1,1]] 
 initialBoard = sg_state(a)
 prob = same_game(initialBoard)
-#printGame(a)
-#print("\n")
-test = [[0,0,0,0,0],[1,0,0,3,3],[1,0,0,1,3],[1,1,1,1,1]]
-printGame(test)
-print(board_find_groups(test))
-#print(depth_first_tree_search(prob))
+printGame(a)
+print("\n")
+print(depth_first_tree_search(prob))
