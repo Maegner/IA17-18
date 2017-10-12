@@ -78,11 +78,8 @@ def board_remove_group(recievingMatrix, group):
 
     matrix = copy.deepcopy(recievingMatrix)
 
-<<<<<<< HEAD
 def board_remove_group(matrix, group):
     matrixCopy = copy.deepcopy(matrix)
-=======
->>>>>>> dd3f284b160b7f2519e67cd63ecc127e3c486b3b
     colunasVazias = []
     linesNumber = len(matrixCopy) 
     columnNumber = len(matrixCopy[0])
@@ -155,12 +152,4 @@ initialBoard = sg_state(a)
 prob = same_game(initialBoard)
 printGame(a)
 print("\n")
-<<<<<<< HEAD
-print(depth_first_tree_search(prob))
-
-s = board_find_groups([[0,0,0,0,0,0],[0,0,0,0,0,]])
-print(s)
-=======
 print(depth_first_tree_search(prob).solution())
-
->>>>>>> 6374db937474d4829f8486e6292b881f6f4e61cc
