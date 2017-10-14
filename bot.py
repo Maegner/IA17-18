@@ -8,13 +8,20 @@ def isTheEnd(matrix):
     groups = board_find_groups(matrix)
     if len(groups) == 0:
         print("finished")
-        return True
+        return True 
+    return False
+
+def isImpossible(matrix):
+    
+    groups = board_find_groups(matrix)
+    
+    if len(groups) == 0:
+        return False
+
     for group in groups:
         if len(group) != 1:
             return False
-    print("imposible game")  
     return True
-
 
 def get_neighbours(pos,matrix,element,result):
 
@@ -88,15 +95,10 @@ def findIsolatedBalls(groups,matrix):
 
 def board_remove_group(matrix, group):
 
-    print("Board_remove_group IN")
-    printGame(matrix)
     matrixCopy = copy.deepcopy(matrix)
     colunasVazias = []
     linesNumber = len(matrixCopy) 
     columnNumber = len(matrixCopy[0])
-    if len(group) == 1:
-        print("not Deleting")
-        return matrix
 
     for pos in group:
         posLine =  pos_line(pos)
@@ -118,8 +120,6 @@ def board_remove_group(matrix, group):
                 break
             deslocaTudoEsquerda(matrixCopy,somatorio)
             somatorio +=1
-    print("Board_remove_group OUT")
-    printGame(matrixCopy)
     return matrixCopy
 
 class sg_state():
@@ -159,7 +159,14 @@ class same_game(Problem):
         self.initial.initBalls(len(board.board)*len(board.board[0]))
 
     def actions(self, state):
-        return state.groups
+        
+        action = []
+
+        for group in state.groups:
+            if len(group) > 1:
+                action.append(group)
+
+        return action
     
     def result(self, state, action):
         newState = sg_state(board_remove_group(state.board, action))
@@ -179,18 +186,14 @@ class same_game(Problem):
         heuristic = 0
 
         if node.action is None:
-            return node.state.isolatedBallNumber
-
-        if getColorInPosition(node.state.board,node.action[0]) in node.state.getIsolatedBallColors():
-            heuristic += 1000000000000
+            return node.state.numberBalls
         
-        heuristic += (node.state.numberBalls - len(node.action))
-
-        heuristic += node.state.isolatedBallNumber
         
+        heuristic = heuristic + node.state.numberBalls
+
         return heuristic 
 
-a = [[3,1,3,2],[1,1,1,3],[1,3,2,1],[1,1,3,3],[3,3,1,2],[2,2,2,2],[3,1,2,3],[2,3,2,3],[2,1,1,3],[2,3,1,2]]
+a = [[1,1,5,3],[5,3,5,3],[1,2,5,4],[5,2,1,4],[5,3,5,1],[5,3,4,4],[5,5,2,5],[1,1,3,1],[1,2,1,3],[3,3,5,5]]
 initialBoard = sg_state(a)
 prob = same_game(initialBoard)
 #printGame(a)
