@@ -58,26 +58,41 @@ def printGame(matrix):
 		
 		print(lineVisual)
 
+def copyMatrix(matrix, matrixDest):
+    for line in range(len(matrix)):
+        lineVector = []
+        for column in range(len(matrix[0])):
+            lineVector.append(matrix[line][column])
+        matrixDest.append(lineVector)
 
-def propagateFall(matrix,deletedPos):
-	numeroColunas = len(matrix[0])
 
-	deletedPosLine=pos_line(deletedPos)
-	deletedPosColumn=pos_column(deletedPos)
+def switchPos(matrix, pos1, pos2):
+    color1= getColorInPosition(matrix, pos1)
+    color2 = getColorInPosition(matrix, pos2)
+    setColorInPosition(matrix, pos1, color2)
+    setColorInPosition(matrix, pos2, color1)
 
-	setColorInPosition(matrix,deletedPos,0)
 
-	if(deletedPosLine == 0):
-		return matrix
-	
-	else:
-		for lineNumber in range(deletedPosLine-1,-1,-1):
-			position = (lineNumber,deletedPosColumn)
-			newPosition = (lineNumber+1,deletedPosColumn)
-			color = getColorInPosition(matrix,position)
 
-			setColorInPosition(matrix,newPosition,color) #drop it down
-			setColorInPosition(matrix,position,0)  #empty previous position
+def propagateFall(matrix):
+    numeroColunas = len(matrix[0])
+    numerLinhas = len(matrix)
+    zerosPositions = []
+    zeroIndex = []
+    for column in range(numeroColunas):
+        zerosPositions.append([])
+        zeroIndex.append(0)
+    for column in range(numeroColunas):
+        for line in range(numerLinhas-1, -1,-1):
+            position = (line, column)
+            if getColorInPosition(matrix, position) == 0:
+                zerosPositions[column].append(position) 
+            elif len(zerosPositions[column]) > 0 and zeroIndex[column] < len(zerosPositions[column]):
+                switchPos(matrix, zerosPositions[column][zeroIndex[column]], position)
+                zerosPositions[column].append(position)
+                zeroIndex[column] +=1
+    return matrix
+
 
 def deslocaTudoEsquerda(matrix, column):
 	if(column == 0):
@@ -91,9 +106,9 @@ def deslocaTudoEsquerda(matrix, column):
 	return matrix
 
 
-def isTheEnd(matrix):
+def isTheEnd(state):
     
-    groups = board_find_groups(matrix)
+    groups = state.groups
     if len(groups) == 0:
         return True 
     return False
@@ -150,7 +165,8 @@ def get_neighbours(pos,matrix,element,result):
     return result
 
 def board_find_groups(matrix):
-    matrixCopy = copy.deepcopy(matrix)
+    matrixCopy = []
+    copyMatrix(matrix, matrixCopy)
     result = []
     l = 0
     col = 0
@@ -180,23 +196,17 @@ def findIsolatedBalls(groups,matrix):
     
     return isolatedBallNumber,isolatedBallColors
 
-def board_remove_group(matrix, group):
 
-    matrixCopy = copy.deepcopy(matrix)
+def board_remove_group(matrix, group):
+    matrixCopy = []
+    copyMatrix(matrix, matrixCopy)
     colunasVazias = []
     linesNumber = len(matrixCopy) 
     columnNumber = len(matrixCopy[0])
 
     for pos in group:
-        posLine =  pos_line(pos)
-        posColumn = pos_column(pos)
-        color = getColorInPosition(matrixCopy, pos)
-        posAbove = get_upper(pos)
-        if (posLine > 0 and getColorInPosition(matrixCopy, posAbove) != color ):
-        	propagateFall(matrixCopy, pos)
-
-        else:
-           setColorInPosition(matrixCopy,pos,set_no_color())
+        setColorInPosition(matrixCopy,pos,set_no_color())
+    propagateFall(matrixCopy)
     for column in range(columnNumber):
         if(matrixCopy[linesNumber-1][column] == 0):
             colunasVazias.append(column)
@@ -230,7 +240,16 @@ class sg_state():
     def removeBalls(self, n):
         self.numberBalls -= n
     def getBalls(self):
-        return self.numberBalls
+        try:
+            return self.numberBalls
+        except:
+            balls = 0
+            for line in self.board:
+                for element in line:
+                    if element != 0:
+                        balls +=1
+            self.numberBalls = balls
+            return self.numberBalls
 
     def isEmpty(self):
         for line in self.board:
@@ -263,7 +282,7 @@ class same_game(Problem):
 
 
     def goal_test(self,state):
-        return isTheEnd(state.board)
+        return isTheEnd(state)
 
     def path_cost(self, c, state1, action, state2):
         return c + 1
@@ -281,20 +300,10 @@ class same_game(Problem):
 
         return heuristic 
 
-result = board_remove_group([[4,4,4,2],[4,4,4,3],[4,4,4,1],[4,4,4,4],[4,4,4,2],[4,4,4,4],[4,4,4,3],[4,4,4,3],[4,4,4,4],[4,4,4,2]], [(0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0), (7, 0), (8, 0), (9, 0), (9, 1), (8, 1), (7, 1), (6, 1), (5, 1), (4, 1), (3, 1), (2, 1), (1, 1), (0, 1), (0, 2), (1, 2), (2, 2), (3, 2), (4, 2), (5, 2), (6, 2), (7, 2), (8, 2), (9, 2), (8, 3), (5, 3), (3, 3)])
-
-#board_find_groups([[4,4,4,2],[4,4,4,3],[4,4,4,1],[4,4,4,4],[4,4,4,2],[4,4,4,4],[4,4,4,3],[4,4,4,3],[4,4,4,4],[4,4,4,2]])
-
-#printGame([[4,4,4,2],[4,4,4,3],[4,4,4,1],[4,4,4,4],[4,4,4,2],[4,4,4,4],[4,4,4,3],[4,4,4,3],[4,4,4,4],[4,4,4,2]])
-
-#print("then")
-
-matriz = [[1,1,1,1],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
-compactVertical(matriz)
-printGame(matriz)
-
-#printGame(result)
-
+#print(board_remove_group([[4,4,4,2],[4,4,4,3],[4,4,4,1],[4,4,4,4],[4,4,4,2],[4,4,4,4],[4,4,4,3],[4,4,4,3],[4,4,4,4],[4,4,4,2]], [(0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0), (7, 0), (8, 0), (9, 0), (9, 1), (8, 1), (7, 1), (6, 1), (5, 1), (4, 1), (3, 1), (2, 1), (1, 1), (0, 1), (0, 2), (1, 2), (2, 2), (3, 2), (4, 2), (5, 2), (6, 2), (7, 2), (8, 2), (9, 2), (8, 3), (5, 3), (3, 3)]))
+#print(board_remove_group([[4,4,4,2],[4,4,4,3],[4,4,4,1],[4,4,4,4],[4,4,4,2],[4,4,4,4],[4,4,4,3],[4,4,4,3],[4,4,4,4],[4,4,4,2]], [(0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0), (7, 0), (8, 0), (9, 0), (9, 1), (8, 1), (7, 1), (6, 1), (5, 1), (4, 1), (3, 1), (2, 1), (1, 1), (0, 1), (0, 2), (1, 2), (2, 2), (3, 2), (4, 2), (5, 2), (6, 2), (7, 2), (8, 2), (9, 2), (8, 3), (5, 3), (3, 3)]))
 #printGame(a)
 #print("\n")
 #print(depth_first_tree_search(prob).solution())
+#print(same_game([[3,1,3,2],[1,1,1,3],[1,3,2,1],[1,1,3,3],[3,3,1,2],[2,2,2,2],[3,1,2,3],[2,3,2,3],[2,1,1,3],[2,3,1,2]]).result(sg_state([[3,1,3,2],[1,1,1,3],[1,3,2,1],[1,1,3,3],[3,3,1,2],[2,2,2,2],[3,1,2,3],[2,3,2,3],[2,1,1,3],[2,3,1,2]]),[(6, 3), (7, 3), (8, 3)]).board)
+#print(([[1,1,5,3],[5,3,5,3],[1,2,5,4],[5,2,1,4],[5,3,5,1],[5,3,4,4],[5,5,2,5],[1,1,3,1],[1,2,1,3],[3,3,5,5]],astar_search(same_game([[1,1,5,3],[5,3,5,3],[1,2,5,4],[5,2,1,4],[5,3,5,1],[5,3,4,4],[5,5,2,5],[1,1,3,1],[1,2,1,3],[3,3,5,5]]))))
