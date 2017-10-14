@@ -184,17 +184,15 @@ def board_find_groups(matrix):
         col = 0
     return result
 
-def findIsolatedBalls(groups,matrix):
+def findIsolatedBalls(groups):
 
     isolatedBallNumber = 0
-    isolatedBallColors = []
 
     for group in groups:
         if len(group) == 1:
             isolatedBallNumber+=1
-            isolatedBallColors.append(getColorInPosition(matrix,group[0]))
     
-    return isolatedBallNumber,isolatedBallColors
+    return isolatedBallNumber
 
 
 def board_remove_group(matrix, group):
@@ -224,7 +222,7 @@ class sg_state():
     def __init__(self, board):
         
         self.groups = board_find_groups(board)
-        self.isolatedBallNumber,self.isolatedBallColors = findIsolatedBalls(self.groups,board)
+        self.isolatedBallNumber = findIsolatedBalls(self.groups)
         self.board = board
 
     def initBalls(self, numberBalls):
@@ -300,10 +298,5 @@ class same_game(Problem):
 
         return heuristic 
 
-#print(board_remove_group([[4,4,4,2],[4,4,4,3],[4,4,4,1],[4,4,4,4],[4,4,4,2],[4,4,4,4],[4,4,4,3],[4,4,4,3],[4,4,4,4],[4,4,4,2]], [(0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0), (7, 0), (8, 0), (9, 0), (9, 1), (8, 1), (7, 1), (6, 1), (5, 1), (4, 1), (3, 1), (2, 1), (1, 1), (0, 1), (0, 2), (1, 2), (2, 2), (3, 2), (4, 2), (5, 2), (6, 2), (7, 2), (8, 2), (9, 2), (8, 3), (5, 3), (3, 3)]))
-#print(board_remove_group([[4,4,4,2],[4,4,4,3],[4,4,4,1],[4,4,4,4],[4,4,4,2],[4,4,4,4],[4,4,4,3],[4,4,4,3],[4,4,4,4],[4,4,4,2]], [(0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0), (7, 0), (8, 0), (9, 0), (9, 1), (8, 1), (7, 1), (6, 1), (5, 1), (4, 1), (3, 1), (2, 1), (1, 1), (0, 1), (0, 2), (1, 2), (2, 2), (3, 2), (4, 2), (5, 2), (6, 2), (7, 2), (8, 2), (9, 2), (8, 3), (5, 3), (3, 3)]))
-#printGame(a)
-#print("\n")
-#print(depth_first_tree_search(prob).solution())
-#print(same_game([[3,1,3,2],[1,1,1,3],[1,3,2,1],[1,1,3,3],[3,3,1,2],[2,2,2,2],[3,1,2,3],[2,3,2,3],[2,1,1,3],[2,3,1,2]]).result(sg_state([[3,1,3,2],[1,1,1,3],[1,3,2,1],[1,1,3,3],[3,3,1,2],[2,2,2,2],[3,1,2,3],[2,3,2,3],[2,1,1,3],[2,3,1,2]]),[(6, 3), (7, 3), (8, 3)]).board)
-#print(([[1,1,5,3],[5,3,5,3],[1,2,5,4],[5,2,1,4],[5,3,5,1],[5,3,4,4],[5,5,2,5],[1,1,3,1],[1,2,1,3],[3,3,5,5]],astar_search(same_game([[1,1,5,3],[5,3,5,3],[1,2,5,4],[5,2,1,4],[5,3,5,1],[5,3,4,4],[5,5,2,5],[1,1,3,1],[1,2,1,3],[3,3,5,5]]))))
+
+#print(type(sg_state([[3,1,3,2],[1,1,1,3],[1,3,2,1],[1,1,3,3],[3,3,1,2],[2,2,2,2],[3,1,2,3],[2,3,2,3],[2,1,1,3],[2,3,1,2]])) is sg_state)
