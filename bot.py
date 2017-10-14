@@ -105,11 +105,11 @@ def board_remove_group(matrix, group):
         posColumn = pos_column(pos)
         color = getColorInPosition(matrixCopy, pos)
         posAbove = get_upper(pos)
-        if (posLine > 0 ):
-            propagateFall(matrixCopy, pos)
+        if (posLine > 0 and getColorInPosition(matrix, posAbove) != color ):
+        	propagateFall(matrixCopy, pos)
 
         else:
-            setColorInPosition(matrixCopy,pos,set_no_color())
+           setColorInPosition(matrixCopy,pos,set_no_color())
     for column in range(columnNumber):
         if(matrixCopy[linesNumber-1][column] == 0):
             colunasVazias.append(column)
@@ -194,9 +194,12 @@ class same_game(Problem):
         return heuristic 
 
 a = [[1,1,5,3],[5,3,5,3],[1,2,5,4],[5,2,1,4],[5,3,5,1],[5,3,4,4],[5,5,2,5],[1,1,3,1],[1,2,1,3],[3,3,5,5]]
+
+
+
 initialBoard = sg_state(a)
 prob = same_game(initialBoard)
 #printGame(a)
-astar_search(prob)
+print(astar_search(prob))
 #print("\n")
 #print(depth_first_tree_search(prob).solution())
