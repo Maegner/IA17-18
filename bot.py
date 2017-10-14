@@ -191,7 +191,7 @@ def board_remove_group(matrix, group):
         posColumn = pos_column(pos)
         color = getColorInPosition(matrixCopy, pos)
         posAbove = get_upper(pos)
-        if (posLine > 0 and getColorInPosition(matrix, posAbove) != color ):
+        if (posLine > 0 and getColorInPosition(matrixCopy, posAbove) != color ):
         	propagateFall(matrixCopy, pos)
 
         else:
