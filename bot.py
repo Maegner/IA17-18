@@ -188,12 +188,13 @@ class same_game(Problem):
         if node.action is None:
             return node.state.numberBalls
         
-        
-        heuristic = heuristic + node.state.numberBalls
+        heuristic+=node.state.isolatedBallNumber
+
+        heuristic+= node.state.numberBalls
 
         return heuristic 
 
-a = [[1,1,5,3],[5,3,5,3],[1,2,5,4],[5,2,1,4],[5,3,5,1],[5,3,4,4],[5,5,2,5],[1,1,3,1],[1,2,1,3],[3,3,5,5]]
+a = [[1,2,2,3,3],[2,2,2,1,3],[1,2,2,2,2],[1,1,1,1,1]] 
 initialBoard = sg_state(a)
 prob = same_game(initialBoard)
 #printGame(a)
