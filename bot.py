@@ -1,6 +1,21 @@
 from personalUtils import *
 from search import *
 import copy
+
+
+def isTheEnd(matrix):
+    
+    groups = board_find_groups(matrix)
+    if len(groups) == 0:
+        print("finished")
+        return True
+    for group in groups:
+        if len(group) != 1:
+            return False
+    print("imposible game")  
+    return True
+
+
 def get_neighbours(pos,matrix,element,result):
 
     # verfies if the element to the top of the refered position is equal to the element
@@ -47,13 +62,12 @@ def board_find_groups(matrix):
     col = 0
     for linha in matrixCopy:
         for element in linha:
-            if(element == -1 or element == 0):
+            if element == -1 or element == 0:
                 col+=1
                 continue
-
             matrixCopy[l][col] = -1
             neighbours = get_neighbours((l,col),matrixCopy,element,[(l,col)])
-            if(len(neighbours) > 1):
+            if(len(neighbours) >= 1):
                 result.append(neighbours)
             col+=1
         l+=1
@@ -68,21 +82,19 @@ def findIsolatedBalls(groups,matrix):
     for group in groups:
         if len(group) == 1:
             isolatedBallNumber+=1
-            append(isolatedBallColors,getColorInPosition(matrix,group[0]))
+            isolatedBallColors.append(getColorInPosition(matrix,group[0]))
     
     return isolatedBallNumber,isolatedBallColors
-
-
-
-def board_remove_group(recievingMatrix, group):
-
-    matrix = copy.deepcopy(recievingMatrix)
 
 def board_remove_group(matrix, group):
     matrixCopy = copy.deepcopy(matrix)
     colunasVazias = []
     linesNumber = len(matrixCopy) 
     columnNumber = len(matrixCopy[0])
+    if len(group) == 1:
+        print("not Deleting")
+        return matrix
+
     for pos in group:
         posLine =  pos_line(pos)
         posColumn = pos_column(pos)
@@ -110,9 +122,15 @@ class sg_state():
     def __init__(self, board):
         
         self.groups = board_find_groups(board)
-        self.isolatedBallNumber,self.isolatedBallColor = findIsolatedBalls(self.groups,board)
+        self.isolatedBallNumber,self.isolatedBallColors = findIsolatedBalls(self.groups,board)
         self.board = board
-        self.numberBalls = len(board)*len(board[0]) 
+        self.numberBalls = len(board)*len(board[0])
+
+    def getIsolatedBallColors(self):
+        return self.isolatedBallColors
+
+    def getIsolatedBallNumber(self):
+        return self.isolatedBallNumber
     
     def __lt__(self, state):
         return self.numberBalls < state.numberBalls 
@@ -132,24 +150,38 @@ class sg_state():
 class same_game(Problem):
 
     def actions(self, state):
-        return board_find_groups(state.board)
+        return state.groups
     
     def result(self, state, action):
         return sg_state(board_remove_group(state.board, action))
 
 
-    def goal_test(self, state):
-        return state.isEmpty() #not really
+    def goal_test(self,state):
+        return isTheEnd(state.board)
 
     def path_cost(self, c, state1, action, state2):
-        return 1 #Duvidas aqui
+        return c + 1
 
-    #def h(self, node):
-       # return 
+    def h(self,node):
+        
+        heuristic = 0
 
-a = [[1,2,2,3,3],[2,2,2,1,3],[1,2,2,2,2],[1,1,1,1,1]] 
+        if node.action is None:
+            return node.state.isolatedBallNumber
+
+        if getColorInPosition(node.state.board,node.action[0]) in node.state.getIsolatedBallColors():
+            heuristic += 1000000000000
+        
+        heuristic += (node.state.numberBalls - len(node.action))
+
+        heuristic += node.state.isolatedBallNumber
+        
+        return heuristic 
+
+a = [[3,1,3,2],[1,1,1,3],[1,3,2,1],[1,1,3,3],[3,3,1,2],[2,2,2,2],[3,1,2,3],[2,3,2,3],[2,1,1,3],[2,3,1,2]]
 initialBoard = sg_state(a)
 prob = same_game(initialBoard)
-printGame(a)
-print("\n")
-print(depth_first_tree_search(prob).solution())
+#printGame(a)
+astar_search(prob)
+#print("\n")
+#print(depth_first_tree_search(prob).solution())

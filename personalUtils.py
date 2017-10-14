@@ -76,8 +76,6 @@ def propagateFall(matrixPrem,deletedPos):
 			setColorInPosition(matrix,newPosition,color) #drop it down
 			setColorInPosition(matrix,position,0)  #empty previous position
 
-
-	#printGame(matrix)
 def deslocaTudoEsquerda(matrix, column):
 	if(column == 0):
 		return
@@ -88,3 +86,4 @@ def deslocaTudoEsquerda(matrix, column):
 		setColorInPosition(matrix,pos,set_no_color())
 		setColorInPosition(matrix, newPos, color)
 	return matrix
+
