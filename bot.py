@@ -1,13 +1,99 @@
-from personalUtils import *
 from search import *
 import copy
+
+#TAI color
+#sem cor = 0
+#com cor > 0
+def set_no_color():
+	return 0
+
+def no_color (c):
+	return c==0 
+
+def has_color(c):
+	return c>0
+
+#TAI pos
+#tuplo (l,c)
+def pos_line(pos):
+	return pos[0]
+
+def pos_column(pos):
+	return pos[1]
+
+def get_upper(pos):
+	return (pos_line(pos)-1,pos_column(pos))
+
+def get_bottom(pos):
+	return (pos_line(pos)+1,pos_column(pos))
+
+def get_left(pos):
+	return (pos_line(pos),pos_column(pos)-1)
+
+def get_right(pos):
+	return (pos_line(pos),pos_column(pos)+1)
+
+#TAI group
+#matriz[[linha],[linha]]
+
+def getColorInPosition(matrix,pos):
+	return matrix[pos_line(pos)][pos_column(pos)]
+
+def setColorInPosition(matrix,pos,color):
+	matrix[pos_line(pos)][pos_column(pos)] = color
+
+def printGame(matrix):
+	
+	for line in matrix:
+		
+		lineVisual = "| "
+		
+		for element in line:
+			lineVisual+= str(element)
+			lineVisual+=" |"
+		
+		print(lineVisual)
+
+def propagateFall(matrixPrem,deletedPos):
+
+	matrix = matrixPrem
+	numeroColunas = len(matrix[0])
+
+	deletedPosLine = pos_line(deletedPos)
+	deletedPosColumn = pos_column(deletedPos)
+
+	setColorInPosition(matrix,deletedPos,0)
+
+
+	if(deletedPosLine == 0):
+		return matrix
+	
+	else:
+
+		for lineNumber in range(deletedPosLine-1,-1,-1):
+			position = (lineNumber,deletedPosColumn)
+			newPosition = (lineNumber+1,deletedPosColumn)
+			color = getColorInPosition(matrix,position)
+
+			setColorInPosition(matrix,newPosition,color) #drop it down
+			setColorInPosition(matrix,position,0)  #empty previous position
+
+def deslocaTudoEsquerda(matrix, column):
+	if(column == 0):
+		return
+	for i in range(len(matrix)):
+		pos = (i, column)
+		newPos = (i, column-1)
+		color = getColorInPosition(matrix, pos) 
+		setColorInPosition(matrix,pos,set_no_color())
+		setColorInPosition(matrix, newPos, color)
+	return matrix
 
 
 def isTheEnd(matrix):
     
     groups = board_find_groups(matrix)
     if len(groups) == 0:
-        print("finished")
         return True 
     return False
 
@@ -105,11 +191,11 @@ def board_remove_group(matrix, group):
         posColumn = pos_column(pos)
         color = getColorInPosition(matrixCopy, pos)
         posAbove = get_upper(pos)
-        if (posLine > 0 ):
-            propagateFall(matrixCopy, pos)
+        if (posLine > 0 and getColorInPosition(matrix, posAbove) != color ):
+        	propagateFall(matrixCopy, pos)
 
         else:
-            setColorInPosition(matrixCopy,pos,set_no_color())
+           setColorInPosition(matrixCopy,pos,set_no_color())
     for column in range(columnNumber):
         if(matrixCopy[linesNumber-1][column] == 0):
             colunasVazias.append(column)
@@ -155,8 +241,8 @@ class sg_state():
 
 class same_game(Problem):
     def __init__(self, board):
-        self.initial = board
-        self.initial.initBalls(len(board.board)*len(board.board[0]))
+        self.initial = sg_state(board)
+        self.initial.initBalls(len(self.initial.board)*len(self.initial.board[0]))
 
     def actions(self, state):
         
@@ -194,10 +280,7 @@ class same_game(Problem):
 
         return heuristic 
 
-a = [[1,2,2,3,3],[2,2,2,1,3],[1,2,2,2,2],[1,1,1,1,1]] 
-initialBoard = sg_state(a)
-prob = same_game(initialBoard)
+print(depth_first_tree_search(same_game([[3,1,3,2],[1,1,1,3],[1,3,2,1],[1,1,3,3],[3,3,1,2],[2,2,2,2],[3,1,2,3],[2,3,2,3],[2,1,1,3],[2,3,1,2]])).state.board)
 #printGame(a)
-astar_search(prob)
 #print("\n")
 #print(depth_first_tree_search(prob).solution())
