@@ -129,8 +129,9 @@ class sg_state():
         self.groups = board_find_groups(board)
         self.isolatedBallNumber,self.isolatedBallColors = findIsolatedBalls(self.groups,board)
         self.board = board
-        self.numberBalls = len(board)*len(board[0])
 
+    def initBalls(self, numberBalls):
+        self.numberBalls = numberBalls
     def getIsolatedBallColors(self):
         return self.isolatedBallColors
 
@@ -153,12 +154,18 @@ class sg_state():
         return True
 
 class same_game(Problem):
+    def __init__(self, board):
+        self.initial = board
+        self.initial.initBalls(len(board.board)*len(board.board[0]))
 
     def actions(self, state):
         return state.groups
     
     def result(self, state, action):
-        return sg_state(board_remove_group(state.board, action))
+        newState = sg_state(board_remove_group(state.board, action))
+        newState.initBalls(state.getBalls())
+        newState.removeBalls(len(action))
+        return newState
 
 
     def goal_test(self,state):
