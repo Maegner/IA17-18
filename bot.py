@@ -1,5 +1,6 @@
 from search import *
 import copy
+import time
 
 #TAI color
 #sem cor = 0
@@ -217,10 +218,21 @@ def board_remove_group(matrix, group):
             somatorio +=1
     return matrixCopy
 
+def findColorNumber(matrix):
+    colors = []
+    for line in matrix:
+        for element in line:
+            if (not element in colors) and element != 0:
+                colors.append(element)
+    return len(colors)
+    
+                
+
 class sg_state():
 
     def __init__(self, board):
         
+        self.colorNumber = findColorNumber(board)
         self.groups = board_find_groups(board)
         self.isolatedBallNumber = findIsolatedBalls(self.groups)
         self.board = board
@@ -292,11 +304,14 @@ class same_game(Problem):
         if node.action is None:
             return node.state.numberBalls
         
+        heuristic+=node.state.colorNumber
+
         heuristic+=node.state.isolatedBallNumber
 
-        heuristic+= node.state.numberBalls
 
         return heuristic 
 
-
-#print(type(sg_state([[3,1,3,2],[1,1,1,3],[1,3,2,1],[1,1,3,3],[3,3,1,2],[2,2,2,2],[3,1,2,3],[2,3,2,3],[2,1,1,3],[2,3,1,2]])) is sg_state)
+t1 = time.time()
+astar_search(same_game([[1,1,5,3],[5,3,5,3],[1,2,5,4],[5,2,1,4],[5,3,5,1],[5,3,4,4],[5,5,2,5],[1,1,3,1],[1,2,1,3],[3,3,5,5]]))
+t2 = time.time()
+print(t2-t1)
