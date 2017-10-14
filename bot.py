@@ -54,6 +54,14 @@ def printGame(matrix):
 		
 		print(lineVisual)
 
+def copyMatrix(matrix, matrixDest):
+    for line in range(len(matrix)):
+        lineVector = []
+        for column in range(len(matrix[0])):
+            lineVector.append(matrix[line][column])
+        matrixDest.append(lineVector)
+
+
 def switchPos(matrix, pos1, pos2):
     color1= getColorInPosition(matrix, pos1)
     color2 = getColorInPosition(matrix, pos2)
@@ -94,9 +102,9 @@ def deslocaTudoEsquerda(matrix, column):
 	return matrix
 
 
-def isTheEnd(matrix):
+def isTheEnd(state):
     
-    groups = board_find_groups(matrix)
+    groups = state.groups
     if len(groups) == 0:
         return True 
     return False
@@ -153,7 +161,8 @@ def get_neighbours(pos,matrix,element,result):
     return result
 
 def board_find_groups(matrix):
-    matrixCopy = copy.deepcopy(matrix)
+    matrixCopy = []
+    copyMatrix(matrix, matrixCopy)
     result = []
     l = 0
     col = 0
@@ -185,8 +194,8 @@ def findIsolatedBalls(groups,matrix):
 
 
 def board_remove_group(matrix, group):
-
-    matrixCopy = copy.deepcopy(matrix)
+    matrixCopy = []
+    copyMatrix(matrix, matrixCopy)
     colunasVazias = []
     linesNumber = len(matrixCopy) 
     columnNumber = len(matrixCopy[0])
@@ -227,7 +236,16 @@ class sg_state():
     def removeBalls(self, n):
         self.numberBalls -= n
     def getBalls(self):
-        return self.numberBalls
+        try:
+            return self.numberBalls
+        except:
+            balls = 0
+            for line in self.board:
+                for element in line:
+                    if element != 0:
+                        balls +=1
+            self.numberBalls = balls
+            return self.numberBalls
 
     def isEmpty(self):
         for line in self.board:
@@ -260,7 +278,7 @@ class same_game(Problem):
 
 
     def goal_test(self,state):
-        return isTheEnd(state.board)
+        return isTheEnd(state)
 
     def path_cost(self, c, state1, action, state2):
         return c + 1
@@ -283,3 +301,5 @@ class same_game(Problem):
 #printGame(a)
 #print("\n")
 #print(depth_first_tree_search(prob).solution())
+#print(same_game([[3,1,3,2],[1,1,1,3],[1,3,2,1],[1,1,3,3],[3,3,1,2],[2,2,2,2],[3,1,2,3],[2,3,2,3],[2,1,1,3],[2,3,1,2]]).result(sg_state([[3,1,3,2],[1,1,1,3],[1,3,2,1],[1,1,3,3],[3,3,1,2],[2,2,2,2],[3,1,2,3],[2,3,2,3],[2,1,1,3],[2,3,1,2]]),[(6, 3), (7, 3), (8, 3)]).board)
+#print(([[1,1,5,3],[5,3,5,3],[1,2,5,4],[5,2,1,4],[5,3,5,1],[5,3,4,4],[5,5,2,5],[1,1,3,1],[1,2,1,3],[3,3,5,5]],astar_search(same_game([[1,1,5,3],[5,3,5,3],[1,2,5,4],[5,2,1,4],[5,3,5,1],[5,3,4,4],[5,5,2,5],[1,1,3,1],[1,2,1,3],[3,3,5,5]]))))
