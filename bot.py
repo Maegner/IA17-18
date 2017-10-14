@@ -87,6 +87,9 @@ def findIsolatedBalls(groups,matrix):
     return isolatedBallNumber,isolatedBallColors
 
 def board_remove_group(matrix, group):
+
+    print("Board_remove_group IN")
+    printGame(matrix)
     matrixCopy = copy.deepcopy(matrix)
     colunasVazias = []
     linesNumber = len(matrixCopy) 
@@ -100,7 +103,7 @@ def board_remove_group(matrix, group):
         posColumn = pos_column(pos)
         color = getColorInPosition(matrixCopy, pos)
         posAbove = get_upper(pos)
-        if (posLine > 0 and getColorInPosition(matrixCopy, posAbove) != color):
+        if (posLine > 0 ):
             propagateFall(matrixCopy, pos)
 
         else:
@@ -115,6 +118,8 @@ def board_remove_group(matrix, group):
                 break
             deslocaTudoEsquerda(matrixCopy,somatorio)
             somatorio +=1
+    print("Board_remove_group OUT")
+    printGame(matrixCopy)
     return matrixCopy
 
 class sg_state():
