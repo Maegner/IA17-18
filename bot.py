@@ -42,6 +42,10 @@ def getColorInPosition(matrix,pos):
 def setColorInPosition(matrix,pos,color):
 	matrix[pos_line(pos)][pos_column(pos)] = color
 
+
+        
+        
+
 def printGame(matrix):
 	
 	for line in matrix:
@@ -54,22 +58,19 @@ def printGame(matrix):
 		
 		print(lineVisual)
 
-def propagateFall(matrixPrem,deletedPos):
 
-	matrix = matrixPrem
+def propagateFall(matrix,deletedPos):
 	numeroColunas = len(matrix[0])
 
-	deletedPosLine = pos_line(deletedPos)
-	deletedPosColumn = pos_column(deletedPos)
+	deletedPosLine=pos_line(deletedPos)
+	deletedPosColumn=pos_column(deletedPos)
 
 	setColorInPosition(matrix,deletedPos,0)
-
 
 	if(deletedPosLine == 0):
 		return matrix
 	
 	else:
-
 		for lineNumber in range(deletedPosLine-1,-1,-1):
 			position = (lineNumber,deletedPosColumn)
 			newPosition = (lineNumber+1,deletedPosColumn)
@@ -191,7 +192,7 @@ def board_remove_group(matrix, group):
         posColumn = pos_column(pos)
         color = getColorInPosition(matrixCopy, pos)
         posAbove = get_upper(pos)
-        if (posLine > 0 and getColorInPosition(matrix, posAbove) != color ):
+        if (posLine > 0 and getColorInPosition(matrixCopy, posAbove) != color ):
         	propagateFall(matrixCopy, pos)
 
         else:
@@ -280,7 +281,20 @@ class same_game(Problem):
 
         return heuristic 
 
-print(depth_first_tree_search(same_game([[3,1,3,2],[1,1,1,3],[1,3,2,1],[1,1,3,3],[3,3,1,2],[2,2,2,2],[3,1,2,3],[2,3,2,3],[2,1,1,3],[2,3,1,2]])).state.board)
+result = board_remove_group([[4,4,4,2],[4,4,4,3],[4,4,4,1],[4,4,4,4],[4,4,4,2],[4,4,4,4],[4,4,4,3],[4,4,4,3],[4,4,4,4],[4,4,4,2]], [(0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0), (7, 0), (8, 0), (9, 0), (9, 1), (8, 1), (7, 1), (6, 1), (5, 1), (4, 1), (3, 1), (2, 1), (1, 1), (0, 1), (0, 2), (1, 2), (2, 2), (3, 2), (4, 2), (5, 2), (6, 2), (7, 2), (8, 2), (9, 2), (8, 3), (5, 3), (3, 3)])
+
+#board_find_groups([[4,4,4,2],[4,4,4,3],[4,4,4,1],[4,4,4,4],[4,4,4,2],[4,4,4,4],[4,4,4,3],[4,4,4,3],[4,4,4,4],[4,4,4,2]])
+
+#printGame([[4,4,4,2],[4,4,4,3],[4,4,4,1],[4,4,4,4],[4,4,4,2],[4,4,4,4],[4,4,4,3],[4,4,4,3],[4,4,4,4],[4,4,4,2]])
+
+#print("then")
+
+matriz = [[1,1,1,1],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
+compactVertical(matriz)
+printGame(matriz)
+
+#printGame(result)
+
 #printGame(a)
 #print("\n")
 #print(depth_first_tree_search(prob).solution())
