@@ -17,6 +17,12 @@ def numberOfVowels(word):
             nber += 1
     return nber
 
+def letterSum(word):
+    result = 0
+    for letter in word:
+        result += ord(letter)
+    return result
+
 def numberOfConsonants(word):
     consonants = "bcdfghjklmnpqrstvwyxzç"
     nber = 0
@@ -37,10 +43,11 @@ def features(X):
     
     F = np.zeros((len(X),3))
     for x in range(0,len(X)):
-        #F[x,3] = len(X[x])
+        F[x,0] = letterSum(X[x])   # IMPORTANT !!
         F[x,1] = numberOfVowels(X[x])
-        F[x,0] = numberOfConsonants(X[x])
-        F[x,2] = numberOfAccentedLetters(X[x])
+        #F[x,2] = numberOfConsonants(X[x])
+        F[x,2] = len(X[x])
+        #F[x,3] = numberOfAccentedLetters(X[x])
 
     return F     
 
@@ -48,7 +55,7 @@ def mytraining(f,Y):
 
     #logreg = LogisticRegression()
     #logreg.fit(f,Y) 
-    knn = KNeighborsClassifier(n_neighbors=5)
+    knn = KNeighborsClassifier(n_neighbors=1)
     knn.fit(f,Y)
    
     return knn
