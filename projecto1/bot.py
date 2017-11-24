@@ -1,6 +1,7 @@
 from search import *
 import copy
 import time
+import resource
 
 #TAI color
 #sem cor = 0
@@ -308,10 +309,21 @@ class same_game(Problem):
 
         heuristic+=node.state.isolatedBallNumber
 
+        #heuristic+=node.state.numberBalls
+
 
         return heuristic 
+"""
+start_mem = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+delta_mem = 0
+max_memory = 0
 
-t1 = time.time()
 astar_search(same_game([[1,1,5,3],[5,3,5,3],[1,2,5,4],[5,2,1,4],[5,3,5,1],[5,3,4,4],[5,5,2,5],[1,1,3,1],[1,2,1,3],[3,3,5,5]]))
-t2 = time.time()
-print(t2-t1)
+
+
+delta_mem = (resource.getrusage(resource.RUSAGE_SELF).ru_maxrss) - start_mem
+if delta_mem > max_memory:
+    max_memory = delta_mem
+
+print(delta_mem)
+"""

@@ -2,7 +2,7 @@ from bot import *
 from search import *
 from personalUtils import *
 
-class sg_state():
+class sg_state(): 
 
     def __init__(self, board,ballNumber,isolatedBallColor,isolatedBallNumber):
         
