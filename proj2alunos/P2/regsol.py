@@ -5,15 +5,10 @@ from sklearn.model_selection import cross_val_score
 import timeit
 
 def mytraining(X,Y):
-    
-   
-    return reg
-    
-def mytrainingaux(X,Y,par):
-    
+    reg = KernelRidge(kernel='rbf', gamma=0.1, alpha = 0.001)
     reg.fit(X,Y)
-                
     return reg
+    
 
 def myprediction(X,reg):
 
