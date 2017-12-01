@@ -3,6 +3,8 @@ from sklearn import datasets, tree, linear_model
 from sklearn.kernel_ridge import KernelRidge
 from sklearn.model_selection import cross_val_score
 from sklearn.externals import joblib
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.pipeline import Pipeline
 import timeit
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
