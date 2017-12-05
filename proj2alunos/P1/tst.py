@@ -6,4 +6,4 @@ def numberOfVowels(word):
             nber += 1
     return nber
 
-print(numberOfVowels("aaaá"))
+print(numberOfVowels("olá"))
