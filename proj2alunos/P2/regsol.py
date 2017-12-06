@@ -6,12 +6,12 @@ from sklearn.neighbors import KNeighborsRegressor
 from sklearn.model_selection import cross_val_score
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.pipeline import Pipeline
-from sklearn.linear_model import HuberRegressor
+from sklearn.linear_model import Perceptron
 import timeit
 
 def mytraining(X,Y):
-    #reg = KernelRidge(kernel='rbf', gamma=0.05, alpha = 1e-05)
-    reg = Pipeline([('poly', PolynomialFeatures(degree=10)),  ('linear', HuberRegressor(alpha=0.1))])
+    reg = KernelRidge(kernel='rbf', gamma=0.05, alpha = 1e-05)
+    #reg = Pipeline([('poly', PolynomialFeatures(degree=10)),  ('linear', HuberRegressor(alpha=0.1))])
     reg.fit(X,Y)
     return reg
     
