@@ -41,7 +41,7 @@ class myRL:
                 
             err = np.linalg.norm(self.Q-newQ)
             self.Q = np.copy(newQ)
-            if err<1e-10:
+            if err<1e-5:
                 break 
         return self.Q
 
