@@ -10,7 +10,7 @@ import timeit
 
 def mytraining(X,Y):
     #reg = KernelRidge(kernel='rbf', gamma=0.05, alpha = 1e-05)
-    reg = svm.SVR(gamma=0.1, epsilon=0.01, C=1000)
+    reg = svm.SVR(gamma=0.05, epsilon=0.05, C=8000)
     reg.fit(X,Y)
     return reg
     

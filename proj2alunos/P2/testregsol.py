@@ -24,15 +24,7 @@ for ii,test in enumerate(["regress.npy", "regress2.npy"]):
     crosVal = -cross_val_score( reg, X, Y, cv = 5, scoring = 'neg_mean_squared_error').mean()
     
     if crosVal < tres[ii]:
-        print(crosVal)
         print("Erro dentro dos limites de tolerância. OK\n")
     else:
-        print(crosVal)
         print("Erro acima dos limites de tolerância. FAILED\n")    
-    plt.figure()
-    plt.plot(Xp,Yp,'g.',label='datatesting')
-    plt.plot(X,Y,'k+',label='datatrain')
-    plt.plot(Xp,Ypred,'m',label='prediction')
-    plt.legend( loc = 1 )
-    plt.show()
 
