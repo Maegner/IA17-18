@@ -1,5 +1,6 @@
-#Projectos IA 2017-2018
+# Projectos IA 2017-2018
 
-##Trabalho Realizado por:
-  -Francisco Aguiar
-  -Pedro Texugo
+## Authors
+- Francisco Aguiar 
+- Pedro Texugo
+
