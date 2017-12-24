@@ -3,4 +3,3 @@
 ## Authors
 - Francisco Aguiar 
 - Pedro Texugo
-
