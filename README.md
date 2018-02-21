@@ -2,7 +2,7 @@
 
 ## Grades (0-20)
 - Project 1 -> 20
-- Project 2 -> Not yet evaluated
+- Project 2 -> 17.5
   
 ## Authors
 - Francisco Aguiar 
